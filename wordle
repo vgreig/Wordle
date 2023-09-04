@@ -1,0 +1,31 @@
+import pathlib
+import random
+from string import ascii_letters
+with open("wordlist.txt") as text_file:
+
+    WORDLIST = pathlib.Path("wordlist.txt")
+words = [
+    word.upper()
+    for word in WORDLIST.read_text(encoding="utf=8").split("\n")
+    if len(word) == 5 and all(letter in ascii_letters for letter in word)
+]
+word = random.choice(words)
+for guess in range(0,7):
+    guess = input("\nGuess a word: ")
+    if guess == word:
+        print ("Correct")
+        break
+#letter search
+    correct_letters = {
+    letter for letter, correct in zip(guess, word) if letter == correct
+    }
+    misplaced_letters = set(guess) & set(word) - correct_letters
+    wrong_letters = set(guess) - set(word)
+    #print results
+    print("Correct letters:", ", ".join(sorted(correct_letters)))
+    print("Misplaced letters:", ", ".join(sorted(misplaced_letters)))
+    print("Wrong letters:", ", ".join(sorted(wrong_letters)))
+
+else:
+    print(f"The word was {word}")
+
